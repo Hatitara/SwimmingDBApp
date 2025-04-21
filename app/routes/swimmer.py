@@ -81,8 +81,6 @@ def swimmer_schedule():
     return render_template('swimmer/schedule.html', schedule=rows, swimmer_id=swimmer_id)
 
 
-from datetime import datetime
-
 @swimmer_bp.route('/performance', methods=['GET', 'POST'])
 def swimmer_performance():
     swimmer_id = request.args.get('swimmer_id')
@@ -101,7 +99,7 @@ def swimmer_performance():
         conn.commit()
 
     registration_query = text("""
-        SELECT e.Name AS event_name, t.StartTime, e.EventID
+        SELECT e.Name AS event_name, t.StartTime, t.EndTime, e.EventID
         FROM Event e
         JOIN Timeslot t ON e.TimeslotID = t.TimeslotID
         JOIN EventSwimmer es ON es.EventID = e.EventID

@@ -29,14 +29,14 @@
         <thead>
             <tr>
                 <th>Event</th>
-                <th>Start Time</th>
+                <th>End Time</th>
             </tr>
         </thead>
         <tbody>
             {% for event in past_events %}
             <tr>
                 <td>{{ event.event_name }}</td>
-                <td>{{ event.StartTime }}</td>
+                <td>{{ event.EndTime }}</td>
             </tr>
             {% endfor %}
         </tbody>
