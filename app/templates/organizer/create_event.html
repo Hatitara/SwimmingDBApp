@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Create Event</h1>
+    <form method="post" class="mt-3">
+        <div class="mb-3">
+            <label class="form-label">Name:</label>
+            <input type="text" name="name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Type:</label>
+            <select name="type" class="form-select" required>
+                <option value="Competition">Competition</option>
+                <option value="Training">Training</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Start Time:</label>
+            <input type="datetime-local" name="start_time" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">End Time:</label>
+            <input type="datetime-local" name="end_time" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create Event</button>
+    </form>
+</div>
+{% endblock %}

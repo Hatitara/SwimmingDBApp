@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="my-4">Apply for Unassigned Swims</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Event</th><th>Distance</th><th>Duration</th><th>Date & Time</th><th>Facility</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for swim in unassigned %}
+            <tr>
+                <td>{{ swim.EventName }}</td>
+                <td>{{ swim.Distance }}</td>
+                <td>{{ swim.Duration }}</td>
+                <td>{{ swim.StartTime }}</td>
+                <td>{{ swim.FacilityName }}</td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="swim_id" value="{{ swim.SwimID }}">
+                        <button type="submit" name="apply" class="btn btn-primary btn-sm">Apply</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h2 class="my-4">Your Assigned Swims</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Event</th><th>Distance</th><th>Duration</th><th>Date & Time</th><th>Facility</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for swim in mine %}
+            <tr>
+                <td>{{ swim.EventName }}</td>
+                <td>{{ swim.Distance }}</td>
+                <td>{{ swim.Duration }}</td>
+                <td>{{ swim.StartTime }}</td>
+                <td>{{ swim.FacilityName }}</td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="swim_id" value="{{ swim.SwimID }}">
+                        <button type="submit" name="cancel" class="btn btn-danger btn-sm">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

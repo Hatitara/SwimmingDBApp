@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-3">Group Info</h3>
+    <div class="card">
+        <div class="card-body">
+            <p><strong>Group:</strong> {{ result.group_name }}</p>
+            <p><strong>Coach:</strong> {{ result.coach_name }}</p>
+            <a href="/swimmer" class="btn btn-outline-secondary mt-3">🔙 Back</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

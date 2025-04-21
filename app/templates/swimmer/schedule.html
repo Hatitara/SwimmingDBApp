@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Training Schedule</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Facility</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in schedule %}
+            <tr>
+                <td>{{ row.event_name }}</td>
+                <td>{{ row.start }}</td>
+                <td>{{ row.end }}</td>
+                <td>{{ row.facility }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/swimmer" class="btn btn-outline-secondary mt-3">🔙 Back</a>
+</div>
+{% endblock %}

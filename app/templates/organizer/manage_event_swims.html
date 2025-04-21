@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Swims for {{ event.Name }}</h1>
+    <a href="{{ url_for('add_swim_to_event', event_id=event.EventID) }}" class="btn btn-primary mb-3">Add Swim</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Distance</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Style</th>
+                <th scope="col">Coach</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for swim in swims %}
+            <tr>
+                <td>{{ swim.Distance }}</td>
+                <td>{{ swim.Duration }}</td>
+                <td>{{ swim.Style }}</td>
+                <td>{{ swim.Coach }}</td>
+                <td>
+                    <form action="{{ url_for('delete_swim', swim_id=swim.SwimID) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

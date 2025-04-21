@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Edit Swim</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label" for="distance">Distance</label>
+            <input type="text" name="distance" id="distance" class="form-control" value="{{ swim.Distance }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="duration">Duration</label>
+            <input type="text" name="duration" id="duration" class="form-control" value="{{ swim.Duration }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="style_id">Style</label>
+            <select name="style_id" id="style_id" class="form-select" required>
+                {% for style in styles %}
+                <option value="{{ style.StyleID }}" {% if style.StyleID == swim.StyleID %}selected{% endif %}>
+                    {{ style.Style }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="coach_id">Coach</label>
+            <select name="coach_id" id="coach_id" class="form-select">
+                <option value="">-- No Coach --</option>
+                {% for coach in coaches %}
+                <option value="{{ coach.CoachID }}" {% if coach.CoachID == swim.CoachID %}selected{% endif %}>
+                    {{ coach.Name }} {{ coach.Surname }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{{ url_for('organizer.manage_swims', event_id=swim.EventID) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

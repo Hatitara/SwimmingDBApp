@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">🏊 Swimmer Portal</h2>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="/swimmer/register" class="btn btn-outline-primary btn-block">Register</a>
+        </li>
+
+        <li class="list-group-item">
+            <span>Register for Event:</span>
+            <form method="get" action="/swimmer/register_event" class="d-flex">
+                <input type="text" name="swimmer_id" placeholder="Enter Your ID" required class="form-control mr-2">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </li>
+
+        <li class="list-group-item">
+            <span>View Group & Coach:</span>
+            <form method="get" action="/swimmer/group" class="d-flex">
+                <input type="text" name="swimmer_id" placeholder="Enter Your ID" class="form-control mr-2">
+                <button type="submit" class="btn btn-primary">View</button>
+            </form>
+        </li>
+
+        <li class="list-group-item">
+            <span>View Schedule:</span>
+            <form method="get" action="/swimmer/schedule" class="d-flex">
+                <input type="text" name="swimmer_id" placeholder="Enter Your ID" class="form-control mr-2">
+                <button type="submit" class="btn btn-primary">View</button>
+            </form>
+        </li>
+
+        <li class="list-group-item">
+            <span>View Performance:</span>
+            <form method="get" action="/swimmer/performance" class="d-flex">
+                <input type="text" name="swimmer_id" placeholder="Enter Your ID" class="form-control mr-2">
+                <button type="submit" class="btn btn-primary">View</button>
+            </form>
+        </li>
+    </ul>
+</div>
+{% endblock %}

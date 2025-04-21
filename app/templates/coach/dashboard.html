@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="my-4">Welcome, Coach {{ coach_id }}</h2>
+
+<ul class="list-group">
+    <li class="list-group-item"><a href="{{ url_for('coach.create_group') }}" class="btn btn-info w-100">Create Group</a></li>
+    <li class="list-group-item"><a href="{{ url_for('coach.list_groups') }}" class="btn btn-info w-100">Manage Groups</a></li>
+    <li class="list-group-item"><a href="{{ url_for('coach.apply_swim') }}" class="btn btn-info w-100">Apply for Swim Sessions</a></li>
+</ul>
+{% endblock %}

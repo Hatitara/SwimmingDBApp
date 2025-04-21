@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h3>Performance Report</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Style</th>
+                <th>Length</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in results %}
+            <tr>
+                <td>{{ row.event_name }}</td>
+                <td>{{ row.style }}</td>
+                <td>{{ row.length }}</td>
+                <td>{{ row.time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Past Events</h4>
+    {% if past_events %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Start Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in past_events %}
+            <tr>
+                <td>{{ event.event_name }}</td>
+                <td>{{ event.StartTime }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No past events found.</p>
+    {% endif %}
+
+    <h4>Upcoming Events</h4>
+    {% if upcoming_events %}
+    <form method="post" action="{{ url_for('swimmer.swimmer_performance') }}">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Event</th>
+                    <th>Start Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in upcoming_events %}
+                <tr>
+                    <td>{{ event.event_name }}</td>
+                    <td>{{ event.StartTime }}</td>
+                    <td>
+                        <form method="POST">
+                            <input type="hidden" name="swimmer_id" value="{{ swimmer_id }}">
+                            <input type="hidden" name="cancel_event_id" value="{{ event.EventID }}">
+                            <button type="submit" class="btn btn-danger">Cancel Registration</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
+    {% else %}
+    <p>No upcoming events found.</p>
+    {% endif %}
+
+    <a href="/swimmer" class="btn btn-outline-secondary mt-3">🔙 Back</a>
+</div>
+{% endblock %}

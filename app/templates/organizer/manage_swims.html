@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Swims for Event {{ event_id }}</h2>
+    <a href="{{ url_for('organizer.add_swim', event_id=event_id) }}" class="btn btn-primary mb-3">Add Swim</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Distance</th>
+                <th>Duration</th>
+                <th>Coach</th>
+                <th>Style</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for swim in swims %}
+            <tr>
+                <td>{{ swim.Distance }}</td>
+                <td>{{ swim.Duration }}</td>
+                <td>{{ swim.CoachName or 'Not assigned' }}</td>
+                <td>{{ swim.Style }}</td>
+                <td>
+                    <form action="{{ url_for('organizer.delete_swim', swim_id=swim.SwimID) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete swim?')">Delete</button>
+                    </form>
+
+                    <a href="{{ url_for('organizer.edit_swim', swim_id=swim.SwimID) }}" class="btn btn-sm btn-secondary">Edit</a>
+
+                    {% if swim.CoachName %}
+                    <form action="{{ url_for('organizer.remove_coach', swim_id=swim.SwimID) }}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Remove coach?')">Remove Coach</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

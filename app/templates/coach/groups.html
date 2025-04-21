@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2 class="my-4">Your Groups</h2>
+<ul class="list-group">
+    {% for group in groups %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ group.Name }} - {{ group.Address }}
+        <div class="btn-group">
+            <a href="{{ url_for('coach.manage_swimmers', group_id=group.GroupID) }}" class="btn btn-warning btn-sm">Manage Swimmers</a>
+            <form method="post" action="{{ url_for('coach.delete_group', group_id=group.GroupID) }}" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
