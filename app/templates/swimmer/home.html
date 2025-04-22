@@ -38,6 +38,14 @@
                 <button type="submit" class="btn btn-primary">View</button>
             </form>
         </li>
+
+        <li class="list-group-item">
+            <span>Delete Swimmer:</span>
+            <form method="post" action="/swimmer/delete" class="d-flex" onsubmit="return confirm('Are you sure you want to delete this swimmer?');">
+                <input type="text" name="swimmer_id" placeholder="Enter Your ID" required class="form-control mr-2">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </li>
     </ul>
 </div>
 {% endblock %}

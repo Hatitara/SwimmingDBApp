@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container mt-4">
     <h3>Performance Report</h3>
-    <table class="table table-striped">
+    <table id="performanceTable" class="table table-striped">
         <thead>
             <tr>
                 <th>Event</th>
@@ -25,7 +25,7 @@
 
     <h4>Past Events</h4>
     {% if past_events %}
-    <table class="table table-striped">
+    <table id="pastEventsTable" class="table table-striped">
         <thead>
             <tr>
                 <th>Event</th>
@@ -47,36 +47,60 @@
 
     <h4>Upcoming Events</h4>
     {% if upcoming_events %}
-    <form method="post" action="{{ url_for('swimmer.swimmer_performance') }}">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Event</th>
-                    <th>Start Time</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for event in upcoming_events %}
-                <tr>
-                    <td>{{ event.event_name }}</td>
-                    <td>{{ event.StartTime }}</td>
-                    <td>
-                        <form method="POST">
-                            <input type="hidden" name="swimmer_id" value="{{ swimmer_id }}">
-                            <input type="hidden" name="cancel_event_id" value="{{ event.EventID }}">
-                            <button type="submit" class="btn btn-danger">Cancel Registration</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </form>
+    <table id="upcomingEventsTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Start Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in upcoming_events %}
+            <tr>
+                <td>{{ event.event_name }}</td>
+                <td>{{ event.StartTime }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('swimmer.swimmer_performance', swimmer_id=swimmer_id) }}">
+                        <input type="hidden" name="swimmer_id" value="{{ swimmer_id }}">
+                        <input type="hidden" name="cancel_event_id" value="{{ event.EventID }}">
+                        <button type="submit" class="btn btn-danger">Cancel Registration</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% else %}
     <p>No upcoming events found.</p>
     {% endif %}
 
     <a href="/swimmer" class="btn btn-outline-secondary mt-3">🔙 Back</a>
 </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function () {
+        $('#performanceTable').DataTable({
+            paging: true,
+            searching: true,
+            order: [[3, 'asc']]
+        });
+        
+        $('#pastEventsTable').DataTable({
+            paging: true,
+            searching: true,
+            order: [[1, 'desc']]
+        });
+        
+        $('#upcomingEventsTable').DataTable({
+            paging: true,
+            searching: true,
+            order: [[1, 'asc']],
+            columnDefs: [
+            { orderable: false, targets: 2 }
+            ]
+        });
+    });
+</script>
 {% endblock %}

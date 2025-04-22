@@ -16,25 +16,35 @@ def register_swimmer():
         surname = request.form['surname']
         gender = request.form['gender']
         date_of_birth = request.form['date_of_birth']
+        style_ids = request.form.getlist('style_ids')
 
-        QUERY = text("""
-            INSERT INTO Swimmer (Name, Surname, Gender, DateOfBirth)
-            VALUES (:name, :surname, :gender, :date_of_birth);
-        """)
-        with engine.connect() as conn:
-            conn.execute(
-                QUERY,
-                {
-                    "name": name,
-                    "surname": surname,
-                    "gender": gender,
-                    "date_of_birth": date_of_birth,
-                }
-            )
+        with engine.begin() as conn:
+            swimmer_insert = text("""
+                INSERT INTO Swimmer (Name, Surname, Gender, DateOfBirth)
+                VALUES (:name, :surname, :gender, :date_of_birth)
+            """)
+            conn.execute(swimmer_insert, {
+                "name": name,
+                "surname": surname,
+                "gender": gender,
+                "date_of_birth": date_of_birth
+            })
+
+            swimmer_id = conn.execute(text("SELECT LAST_INSERT_ID()")).scalar()
+
+            for style_id in style_ids:
+                conn.execute(text("""
+                    INSERT INTO SwimmerStyle (SwimmerID, StyleID)
+                    VALUES (:swimmer_id, :style_id)
+                """), {"swimmer_id": swimmer_id, "style_id": style_id})
             conn.commit()
+
         return redirect("/swimmer")
 
-    return render_template("swimmer/register.html")
+    with engine.begin() as conn:
+        styles = conn.execute(text("SELECT StyleID, Style FROM Style")).fetchall()
+    return render_template("swimmer/register.html", styles=styles)
+
 
 @swimmer_bp.route('/group')
 def swimmer_group():
@@ -63,7 +73,6 @@ def swimmer_schedule():
     swimmer_id = request.args.get('swimmer_id')
     if swimmer_id is None:
         return "Swimmer ID is required", 400
-    
     query = text("""
         SELECT e.Name AS event_name, t.StartTime AS start, t.EndTime AS end, f.Name AS facility
         FROM Swimmer s
@@ -73,11 +82,12 @@ def swimmer_schedule():
         JOIN Timeslot t ON e.TimeslotID = t.TimeslotID
         JOIN Facility f ON t.FacilityID = f.FacilityID
         WHERE s.SwimmerID = :swimmer_id
+        AND t.StartTime > NOW()
+        ORDER BY t.StartTime ASC
     """)
     with engine.connect() as conn:
         rows = conn.execute(query, {"swimmer_id": swimmer_id}).fetchall()
         conn.commit()
-    
     return render_template('swimmer/schedule.html', schedule=rows, swimmer_id=swimmer_id)
 
 
@@ -85,7 +95,7 @@ def swimmer_schedule():
 def swimmer_performance():
     swimmer_id = request.args.get('swimmer_id')
     if swimmer_id is None:
-        return "Swimmer ID is required", 400    
+        return "Swimmer ID is required", 400
 
     query = text("""
         SELECT e.name AS event_name, r.Length AS length, r.Time AS time, s.Style AS style
@@ -119,6 +129,9 @@ def swimmer_performance():
             past_events.append(event)
         else:
             upcoming_events.append(event)
+
+    upcoming_events = sorted(upcoming_events, key=lambda e: e.StartTime)
+    past_events = sorted(past_events, key=lambda e: e.EndTime, reverse=True)
 
     if request.method == 'POST':
         cancel_event_id = request.form.get('cancel_event_id')
@@ -167,3 +180,12 @@ def register_event():
 
     return render_template('swimmer/register_event.html', events=events, swimmer_id=swimmer_id)
 
+@swimmer_bp.route('/delete', methods=['POST'])
+def delete_swimmer():
+    swimmer_id = request.form.get('swimmer_id')
+    if not swimmer_id:
+        return "Swimmer ID is required", 400
+    with engine.begin() as conn:
+        conn.execute(text("DELETE FROM Swimmer WHERE SwimmerID = :swimmer_id"), {"swimmer_id": swimmer_id})
+        conn.commit()
+    return redirect(url_for('swimmer.swimmer_home'))

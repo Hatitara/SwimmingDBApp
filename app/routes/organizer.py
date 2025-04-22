@@ -71,6 +71,7 @@ def create_event():
             return redirect(url_for('organizer.view_events'))
 
         facilities = conn.execute(text("SELECT * FROM Facility")).fetchall()
+        conn.commit()
         return render_template('organizer/create_event.html', facilities=facilities)
 
 @organizer_bp.route('/events/<int:event_id>/edit', methods=['GET', 'POST'])

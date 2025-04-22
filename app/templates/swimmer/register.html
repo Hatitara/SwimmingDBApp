@@ -7,12 +7,12 @@
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required class="form-control">
         </div>
-        
+
         <div class="form-group">
             <label for="surname">Surname:</label>
             <input type="text" id="surname" name="surname" required class="form-control">
         </div>
-        
+
         <div class="form-group">
             <label for="gender">Gender:</label>
             <select id="gender" name="gender" required class="form-control">
@@ -22,10 +22,20 @@
                 <option value="Other">Other</option>
             </select>
         </div>
-        
+
         <div class="form-group">
             <label for="date_of_birth">Date of Birth:</label>
             <input type="date" id="date_of_birth" name="date_of_birth" required class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="style_ids">Preferred Styles:</label>
+            <select id="style_ids" name="style_ids" multiple required class="form-control">
+                {% for style in styles %}
+                    <option value="{{ style.StyleID }}">{{ style.Style }}</option>
+                {% endfor %}
+            </select>
+            <small class="form-text text-muted">Hold Ctrl (Windows) or Command (Mac) to select multiple styles.</small>
         </div>
 
         <button type="submit" class="btn btn-primary">Register</button>
